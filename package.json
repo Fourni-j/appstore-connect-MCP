@@ -1,6 +1,6 @@
 {
   "name": "appstore-connect-mcp",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "MCP server for App Store Connect — analytics, metadata, downloads, and ASO insights",
   "type": "module",
   "license": "MIT",
