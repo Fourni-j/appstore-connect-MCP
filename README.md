@@ -79,6 +79,22 @@ Always specify `granularity` (`DAILY` or `MONTHLY`). Without it, Apple mixes mon
 
 **Parameters:** `appId` (required), `category` (required), `granularity` (optional but recommended), `startDate` (optional), `endDate` (optional), `raw` (optional, default false), `limit` (optional, max raw rows when raw=true)
 
+#### How analytics reports work
+
+Analytics reports use Apple's [asynchronous reporting flow](https://developer.apple.com/documentation/appstoreconnectapi/analytics-reports). This is fundamentally different from the other tools — it doesn't return data from a single API call.
+
+**The flow:**
+
+1. **Report request** — The server creates an `ONGOING` [analytics report request](https://developer.apple.com/documentation/appstoreconnectapi/request-analytics-reports) for your app. This tells Apple to start generating reports.
+2. **Report generation** — Apple processes the request and produces [report instances](https://developer.apple.com/documentation/appstoreconnectapi/list-all-instances-of-a-report) (one per time period). This happens on Apple's side.
+3. **Segment download** — Each instance contains one or more [segments](https://developer.apple.com/documentation/appstoreconnectapi/list-all-segments-for-a-report-instance) (gzipped TSV files) that the server downloads and parses.
+
+**First-time setup:** The very first call for a given app will create the report request and return a `"pending"` status. Apple needs time (typically a few hours, sometimes up to 24h) to generate the initial reports. Subsequent calls will return data immediately, as the server caches report request IDs and segment data.
+
+**Why it can be slow:** Even after initial setup, fetching analytics involves multiple chained API calls (list reports → list instances → list segments → download each segment). For large date ranges with many instances, this can take 10-30 seconds.
+
+See [Apple's Analytics Reports documentation](https://developer.apple.com/documentation/appstoreconnectapi/analytics-reports) for the full API reference.
+
 ### get_app_store_versions
 
 List app versions with their App Store state (`READY_FOR_SALE`, `IN_REVIEW`, etc.), creation date, and platform. Useful for correlating releases with metric changes.
