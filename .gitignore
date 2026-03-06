@@ -6,3 +6,4 @@ dist/
 *.p8
 .DS_Store
 .claude/
+TODO.md

@@ -1,11 +1,27 @@
 {
   "name": "appstore-connect-mcp",
   "version": "1.0.0",
-  "description": "MCP server for App Store Connect ASO analysis",
+  "description": "MCP server for App Store Connect — analytics, metadata, downloads, and ASO insights",
   "type": "module",
+  "license": "MIT",
+  "author": "Fourni-j",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Fourni-j/appstore-connect-MCP.git"
+  },
+  "keywords": ["mcp", "app-store-connect", "apple", "aso", "analytics", "model-context-protocol"],
+  "engines": {
+    "node": ">=18"
+  },
   "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": ["dist"],
+  "bin": {
+    "appstore-connect-mcp": "dist/index.js"
+  },
   "scripts": {
     "build": "tsc",
+    "prepare": "npm run build",
     "start": "node dist/index.js",
     "test": "vitest run",
     "test:watch": "vitest"
