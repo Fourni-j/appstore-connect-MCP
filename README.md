@@ -1,4 +1,4 @@
-# App Store Connect MCP Server
+# Unofficial App Store Connect MCP Server
 
 An MCP (Model Context Protocol) server that gives AI assistants structured access to App Store Connect data. Built for ASO (App Store Optimization) analysis, download tracking, and performance monitoring.
 
