@@ -126,6 +126,14 @@ Get first-time download counts aggregated by period. Automatically uses daily gr
 
 **Parameters:** `appId` (required), `startDate` (optional), `endDate` (optional)
 
+### get_customer_reviews
+
+Get customer reviews and ratings for an app. Returns individual written reviews with aggregated statistics (average rating, star distribution), plus the official App Store rating from the iTunes Lookup API.
+
+The App Store rating includes all ratings (silent star taps + written reviews) and varies by country — set `storeCountry` to get the rating for a specific market.
+
+**Parameters:** `appId` (required), `rating` (optional, 1-5), `territory` (optional, 3-letter code like `USA`, `FRA`), `sort` (optional, default `-createdDate`), `startDate` (optional), `endDate` (optional), `storeCountry` (optional, 2-letter ISO code, default `US`), `limit` (optional, default 500, max 1000)
+
 ## How Analytics Reports Work
 
 Analytics reports use Apple's [asynchronous reporting flow](https://developer.apple.com/documentation/appstoreconnectapi/analytics-reports). This is different from the other tools — it doesn't return data from a single API call.
@@ -210,6 +218,39 @@ All tools return JSON with an agent-friendly structure:
 </details>
 
 <details>
+<summary>Customer reviews example</summary>
+
+```json
+{
+  "summary": "App Store rating (US): 4.58 from 178 ratings. 42 written reviews (avg 3.26). Distribution: 5★=16, 4★=10, 3★=8, 2★=3, 1★=5.",
+  "appId": "123",
+  "storeRating": {
+    "averageRating": 4.58,
+    "ratingCount": 178,
+    "currentVersionAverageRating": 4.58,
+    "currentVersionRatingCount": 178
+  },
+  "totalReviews": 42,
+  "averageRating": 3.26,
+  "ratingDistribution": { "1": 5, "2": 3, "3": 8, "4": 10, "5": 16 },
+  "truncated": false,
+  "reviews": [
+    {
+      "id": "review-id",
+      "rating": 5,
+      "title": "Great app!",
+      "body": "Love the barcode scanning feature.",
+      "reviewerNickname": "user123",
+      "territory": "USA",
+      "createdDate": "2026-03-01T00:00:00Z"
+    }
+  ]
+}
+```
+
+</details>
+
+<details>
 <summary>Error example</summary>
 
 ```json
@@ -239,13 +280,14 @@ npx tsx scripts/test-tools.ts
 # Run a specific tool
 npx tsx scripts/test-tools.ts list-apps
 npx tsx scripts/test-tools.ts get-analytics-report
+npx tsx scripts/test-tools.ts get-customer-reviews
 ```
 
 ## Development
 
 ```bash
 npm run build        # Compile TypeScript
-npm test             # Run tests (84 tests)
+npm test             # Run tests (94 tests)
 npm run test:watch   # Watch mode
 npm start            # Start the MCP server
 ```

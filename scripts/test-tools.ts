@@ -16,6 +16,7 @@ import { handleGetAppStoreVersions } from "../src/tools/get-app-store-versions.j
 import { handleGetSalesReport } from "../src/tools/get-sales-report.js";
 import { handleGetDownloadsSummary } from "../src/tools/get-downloads-summary.js";
 import { handleGetAnalyticsReport } from "../src/tools/get-analytics-report.js";
+import { handleGetCustomerReviews } from "../src/tools/get-customer-reviews.js";
 
 const SEPARATOR = "\n" + "=".repeat(70) + "\n";
 
@@ -86,6 +87,12 @@ async function main() {
           startDate: "2026-02-01",
           endDate: "2026-02-07",
         })
+      );
+    }
+
+    if (!filter || filter === "get-customer-reviews") {
+      await run("get_customer_reviews", () =>
+        handleGetCustomerReviews({ appId: appId!, limit: 20 })
       );
     }
 

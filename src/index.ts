@@ -9,6 +9,7 @@ import { getAppStoreVersionsSchema, handleGetAppStoreVersions } from "./tools/ge
 import { getSalesReportSchema, handleGetSalesReport } from "./tools/get-sales-report.js";
 import { getAnalyticsReportSchema, handleGetAnalyticsReport } from "./tools/get-analytics-report.js";
 import { getDownloadsSummarySchema, handleGetDownloadsSummary } from "./tools/get-downloads-summary.js";
+import { getCustomerReviewsSchema, handleGetCustomerReviews } from "./tools/get-customer-reviews.js";
 
 const server = new McpServer({
   name: "appstore-connect",
@@ -55,6 +56,13 @@ server.tool(
   "Get first-time download counts aggregated by period. Automatically uses daily granularity for ranges under 32 days, monthly otherwise. Only counts new installs (excludes updates, re-downloads, IAPs). Requires ASC_VENDOR_NUMBER env var. Requires appId from list_apps.",
   getDownloadsSummarySchema.shape,
   async (input) => handleGetDownloadsSummary(getDownloadsSummarySchema.parse(input))
+);
+
+server.tool(
+  "get_customer_reviews",
+  "Get customer reviews and ratings for an app. Returns individual written reviews with aggregated rating statistics (average rating, star distribution). Also fetches the official App Store rating (average + count) from the iTunes Lookup API — set storeCountry (2-letter ISO code, default 'US') to get ratings for a specific country. Written reviews can be filtered by star rating, territory (3-letter code like 'USA', 'FRA'), and date range. Sorted by newest first by default. Requires appId from list_apps.",
+  getCustomerReviewsSchema.shape,
+  async (input) => handleGetCustomerReviews(getCustomerReviewsSchema.parse(input))
 );
 
 async function main() {
